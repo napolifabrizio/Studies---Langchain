@@ -7,3 +7,7 @@ Langchain é um framework que para manipular e interagir com LLM's através do P
 estruturação de dados, treinar e criar agentes de IA!
 
 ## Estrutura
+
+## Links
+
+Observabilidade -> https://docs.langchain.com/langsmith/log-traces-to-project
