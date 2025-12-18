@@ -33,3 +33,37 @@ loader = CSVLoader(path)
 documents = loader.load()
 
 print(len(documents))
+
+# Carregando da Internet
+
+from langchain_community.document_loaders.generic import GenericLoader
+from langchain_community.document_loaders.blob_loaders.youtube_audio import YoutubeAudioLoader
+from langchain.document_loaders.parsers import OpenAIWhisperParser
+
+url = "https://www.youtube.com/watch?v=3UBNR-Ft_mk"
+
+save_dir='docs/youtube/'
+loader = GenericLoader(
+    YoutubeAudioLoader([url], save_dir),
+    OpenAIWhisperParser()
+)
+
+# docs = loader.load()
+
+# URLs
+
+from langchain_community.document_loaders.web_base import WebBaseLoader
+
+url = ''
+loader = WebBaseLoader(url)
+documents = loader.load()
+
+# docs = loader.load()
+
+# Notion
+from langchain_community.document_loaders.notion import NotionDirectoryLoader
+
+path = ''
+loader = NotionDirectoryLoader(path)
+
+# docs = loader.load()
