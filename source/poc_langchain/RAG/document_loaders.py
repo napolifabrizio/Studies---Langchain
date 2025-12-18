@@ -98,7 +98,7 @@ class MyCustomLoader(BaseLoader):
         # Lógica para carregar os dados da fonte
         documents = []
         # Exemplo: Carregar dados de um arquivo de texto
-        with open(self.source, 'r') as file:
+        with open(self.source, 'r', encoding="utf-8") as file:
             content = file.read()
             # Criar um documento com o conteúdo e metadados
             documents.append(Document(page_content=content, metadata={"source": self.source}))
@@ -136,3 +136,51 @@ documentos = loader.load()
 for doc in documentos:
     print(doc.page_content)
     print(doc.metadata)
+
+##############################
+# Upgrade Loaders personalizados
+##############################
+
+from typing import Iterator, List
+from langchain.document_loaders.base import BaseLoader
+from langchain.document_loaders import DirectoryLoader
+from langchain.schema import Document
+
+class MyCustomLoader(BaseLoader):
+    def __init__(self, file_path: str):
+        self.file_path = file_path
+
+    def lazy_load(self) -> Iterator[Document]:
+        with open(self.file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        yield Document(
+            page_content=content,
+            metadata={"source": self.file_path}
+        )
+
+    def load(self) -> List[Document]:
+        return list(self.lazy_load())
+
+loader = DirectoryLoader(
+    path="docs/",
+    glob="**/*.txt",
+    loader_cls=MyCustomLoader
+)
+
+documents = loader.load()
+
+##############################
+#        Text Loader
+##############################
+
+from langchain.document_loaders import DirectoryLoader, TextLoader
+
+loader = DirectoryLoader(
+    path="docs/",              # pasta com .md
+    glob="**/*.md",
+    loader_cls=TextLoader,     # rápido e suficiente na maioria dos casos
+    show_progress=True,
+)
+
+documents = loader.load()
