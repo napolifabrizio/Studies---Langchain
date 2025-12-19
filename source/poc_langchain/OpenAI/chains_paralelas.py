@@ -20,4 +20,9 @@ Nome do produto: {nome_produto}
 Público: {publico}""")
 
 parallel = RunnableParallel({'nome_produto': chain_nome, 'publico': chain_clientes})
-parallel.invoke({'produto': 'Um copo inquebrável'})
+print(parallel.invoke({'produto': 'Um copo inquebrável'}))
+
+print("\n\n")
+
+chain = parallel | prompt | ChatOpenAI() | StrOutputParser()
+print(chain.invoke({'produto': 'Um copo inquebrável'}))

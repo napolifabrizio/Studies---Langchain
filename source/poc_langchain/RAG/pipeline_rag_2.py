@@ -5,9 +5,10 @@ from langchain_community.document_loaders.pdf import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 ################## 1 - Carregando meu arquivo, fazendo o split e gerando a VectorStore
+
 paths = [
     "arquivos/Explorando a API da OpenAI.pdf",
-    ]
+]
 
 pages = []
 for path in paths:
