@@ -3,14 +3,14 @@ from langchain_core.prompts import ChatPromptTemplate
 
 from poc_langchain.environs import Environs
 
-from pydantic import BaseModel, Fiel
+from pydantic import BaseModel, Field
 
 class TradutorOutput(BaseModel):
     original: str = Field(description="Texto original, prompt exato do usuário")
     traduzido: str = Field(description="Sua resposta, o texto traduzido")
 
 class ResumidorOutput(BaseModel):
-    original: str = Field(description="Texto original, prompt exato do usuário")
+    original: str = Field(description="Texto original, prompt exato que chegou até você, e não especificamente o que o do usuário")
     resumido: str = Field(description="Sua resposta, o resumo do texto")
 
 environs = Environs()
@@ -30,7 +30,7 @@ prompt_resumidor = ChatPromptTemplate.from_template("Você vai pegar esse texto 
 chain_resumido = prompt_resumidor | chat.with_structured_output(ResumidorOutput)
 
 # chain final
-chain = chain_tradutor | chain_resumido
+chain = chain_tradutor | (lambda x: x.traduzido) | chain_resumido
 
 result = chain.invoke({"texto": frase})
 
